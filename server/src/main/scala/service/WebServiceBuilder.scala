@@ -5,7 +5,10 @@ import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.webapp.WebAppContext
 
 object WebServiceBuilder {
+
+
   def buildWebService(port: Integer, webServiceClass: Class[_ <: Servlet]): Server = {
+
     val server = new Server(port)
     val context = new WebAppContext()
     context.setContextPath("/")
