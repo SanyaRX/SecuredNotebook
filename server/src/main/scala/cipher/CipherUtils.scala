@@ -24,10 +24,12 @@ object CipherUtils {
     * */
   def publicFromString (publicK: String): PublicKey = {
 
-    val keyBytes = Base64.getDecoder.decode(publicK.getBytes("utf-8"))
+    val keyBytes = decodeBase64FromString(publicK)
 
     val spec = new X509EncodedKeySpec(keyBytes)
     val keyFactory = KeyFactory.getInstance("RSA")
+
+
     val key = keyFactory.generatePublic(spec)
 
     key
@@ -41,7 +43,7 @@ object CipherUtils {
     val encryptCipher = Cipher.getInstance("RSA")
     encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey)
 
-    val cipherText = encryptCipher.doFinal(plainText.getBytes("UTF_8"))
+    val cipherText = encryptCipher.doFinal(plainText.getBytes("UTF-8"))
 
     Base64.getEncoder.encodeToString(cipherText)
   }

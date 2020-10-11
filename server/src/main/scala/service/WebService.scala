@@ -34,7 +34,8 @@ class WebService extends ScalatraServlet  {
 
   get("/sessionKey") {
 
-    val publicKeyString = params.get("publicKey").get
+
+    val publicKeyString = params.get("publicKey").get.replace(" ", "+")
 
     val sessionKey = AESCipher.generateSessionKey()
 
