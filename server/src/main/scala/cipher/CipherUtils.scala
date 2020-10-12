@@ -39,13 +39,10 @@ object CipherUtils {
 
     val publicKey = publicFromString(key)
 
-
-
     val encryptCipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding")
     encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey)
 
     val cipherText = encryptCipher.doFinal(plainText.getBytes(Charset.forName("UTF-8")))
-
 
     Base64.getEncoder.encodeToString(cipherText)
   }

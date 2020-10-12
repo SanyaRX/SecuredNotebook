@@ -9,26 +9,30 @@ import scala.io.Source
 
 class WebService extends ScalatraServlet  {
 
-  /**
-  * TODO: JSON response
-  * */
+
   get("/filesList") {
 
     val fileDirectory = new File(ServerConfig.fileDirectoryPath)
 
+    val sb = new StringBuilder()
+
+    sb.append("{ \"files\": [")
+
     if (fileDirectory.exists() && fileDirectory.isDirectory) {
 
-      fileDirectory.listFiles(_.isFile())
-                   .map(_.getName)
-                   .mkString("\n")
-    } else {
-      null
+      sb.append(fileDirectory.listFiles(_.isFile())
+                   .map("\"%s\"" format _.getName)
+                   .mkString(", ")
+      )
     }
+
+    sb.append("] }")
+
+    sb.toString
   }
 
 
   get("/sessionKey") {
-
 
     val publicKeyString = params.get("publicKey").get.replace(" ", "+").replace("\n", "")
 
@@ -57,9 +61,6 @@ class WebService extends ScalatraServlet  {
     val fileText = Source.fromFile(file).getLines.mkString
 
     val sessionKey = servletContext.getAttribute("sessionKey:" + encryptedSessionKey).toString
-
-    println(encryptedSessionKey)
-    println(sessionKey)
 
     val encryptedText = AESCipher.encrypt(fileText, sessionKey)
 
