@@ -1,14 +1,27 @@
 package cipher
-import javax.crypto.Cipher
-import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.SecretKeySpec
+
+
 import java.security.{MessageDigest, SecureRandom}
+import javax.crypto.Cipher
+import javax.crypto.spec.{IvParameterSpec, SecretKeySpec}
 
-class AESCipher {
+
+object AESCipher {
 
 
+  def generateSessionKey(): String = {
 
-  def encrypt(plainText: String, key: String): Array[Byte] = {
+    val r = new scala.util.Random
+    val sb = new StringBuilder
+    for (i <- 1 to 16) {
+      sb.append(r.nextPrintableChar)
+    }
+    sb.toString
+  }
+
+
+  def encrypt(plainText: String, key: String): String = {
+
     val clean = plainText.getBytes
     // Generating IV.
     val ivSize = 16
@@ -30,13 +43,15 @@ class AESCipher {
     val encryptedIVAndText = new Array[Byte](ivSize + encrypted.length)
     System.arraycopy(iv, 0, encryptedIVAndText, 0, ivSize)
     System.arraycopy(encrypted, 0, encryptedIVAndText, ivSize, encrypted.length)
-    encryptedIVAndText
+
+
+    CipherUtils.encodeBase64ToString(encryptedIVAndText)
   }
 
-
-  def decrypt(encryptedIvTextBytes: Array[Byte], key: String): String = {
+  def decrypt(encryptedIvText: String, key: String): String = {
     val ivSize = 16
-    val keySize = 16
+
+    val encryptedIvTextBytes = CipherUtils.decodeBase64FromString(encryptedIvText)
     // Extract IV.
     val iv = new Array[Byte](ivSize)
     System.arraycopy(encryptedIvTextBytes, 0, iv, 0, iv.length)
@@ -46,7 +61,7 @@ class AESCipher {
     val encryptedBytes = new Array[Byte](encryptedSize)
     System.arraycopy(encryptedIvTextBytes, ivSize, encryptedBytes, 0, encryptedSize)
     // Hash key.
-    val keyBytes = new Array[Byte](keySize)
+    val keyBytes = new Array[Byte](key.length)
     val md = MessageDigest.getInstance("SHA-256")
     md.update(key.getBytes)
     System.arraycopy(md.digest, 0, keyBytes, 0, keyBytes.length)
