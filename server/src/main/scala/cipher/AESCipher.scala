@@ -9,7 +9,7 @@ import javax.crypto.spec.{IvParameterSpec, SecretKeySpec}
 object AESCipher {
 
 
-  def generateSessionKey(): String = {
+  def generateKey(): String = {
 
     val r = new scala.util.Random
     val sb = new StringBuilder

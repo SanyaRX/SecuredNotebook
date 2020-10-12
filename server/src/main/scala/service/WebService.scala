@@ -3,7 +3,8 @@ package service
 import config.ServerConfig
 import org.scalatra.ScalatraServlet
 import java.io.File
-import cipher.{AESCipher, CipherUtils}
+
+import cipher.{AESCipher, CipherUtils, SessionKey}
 
 import scala.io.Source
 
@@ -36,9 +37,9 @@ class WebService extends ScalatraServlet  {
 
     val publicKeyString = params.get("publicKey").get.replace(" ", "+").replace("\n", "")
 
-    val sessionKey = AESCipher.generateSessionKey()
+    val sessionKey = new SessionKey(ServerConfig.sessionKeyLifeTimeMills)
 
-    val encryptedSessionKey = CipherUtils.encryptRSA(sessionKey, publicKeyString)
+    val encryptedSessionKey = CipherUtils.encryptRSA(sessionKey.getSessionKey(), publicKeyString)
    
     servletContext.setAttribute("sessionKey:" + encryptedSessionKey, sessionKey)
 
@@ -60,9 +61,11 @@ class WebService extends ScalatraServlet  {
 
     val fileText = Source.fromFile(file).getLines.mkString
 
-    val sessionKey = servletContext.getAttribute("sessionKey:" + encryptedSessionKey).toString
+    val sessionKey = servletContext.getAttribute("sessionKey:" + encryptedSessionKey).asInstanceOf[SessionKey]
 
-    val encryptedText = AESCipher.encrypt(fileText, sessionKey)
+    if (!sessionKey.isAlive()) "{\"text\":\"Error 403\"}"
+
+    val encryptedText = AESCipher.encrypt(fileText, sessionKey.getSessionKey())
 
     "{\"text\":\"%s\"}" format encryptedText
   
