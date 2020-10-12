@@ -1,4 +1,3 @@
-
 package cipher
 
 import java.math.BigInteger
@@ -7,7 +6,7 @@ import java.security.KeyFactory
 import java.security.PublicKey
 import java.security.spec.X509EncodedKeySpec
 import java.util.Base64
-import java.nio.charset.Charset
+
 import javax.crypto.Cipher
 
 object CipherUtils {
@@ -44,11 +43,12 @@ object CipherUtils {
     println("Publick key(base64): " + encodeBase64ToString(publicKey.getEncoded))
 
 
-    val encryptCipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding")
+    val encryptCipher = Cipher.getInstance("RSA")
     encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey)
 
-    val cipherText = encryptCipher.doFinal(plainText.getBytes(Charset.forName("UTF-8")))
-
+     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7xQ2nq/9JpegMzavHYB1Zf0m1TETzutEd+kLocJvKM56DbswNyvmtZJjGJqiesMKAKTNQE3dFx
+vtCOr79k/w65LSgZcQYm0LqBBuDw7NSWW5GNnbKiCMlGcAH0zGnt+9QzKetirYhaew9LukY7aQ1qhtzdDw/mws7O6bOiv9XJ/1mJYRuopitZRmkWbpHntvhID7DTN0KXOA9FicHi6y9
+Bl4O8MKDUP7NndqjiVNDzIxEPR7muuaDnIgZD2d2E7ws07bTQUkY4/dnR7wdhevcZ8U0U4yppy7k2vKxky40R9F36aAS8vnyluoYllufzvfEFeV2Rw6V3duRPFxVeZViwIDAQAB
 
     Base64.getEncoder.encodeToString(cipherText)
   }

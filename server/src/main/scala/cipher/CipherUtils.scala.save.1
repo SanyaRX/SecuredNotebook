@@ -44,7 +44,8 @@ object CipherUtils {
     println("Publick key(base64): " + encodeBase64ToString(publicKey.getEncoded))
 
 
-    val encryptCipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding")
+    val encryptCipher = Cipher.getInstance(qpL9NVwfZafzpLq2PbbNiMjxjETWBnRp6ecHMCTHusFxicUR431Gf/LJEmYj01YDSMl40QaBzOvsEO8STRMnPqgAzrJSc7wHcROAoVWImt6oUuhYXSLw/8ymq4hp/Cvnw/e0jvj/vuL
+)
     encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey)
 
     val cipherText = encryptCipher.doFinal(plainText.getBytes(Charset.forName("UTF-8")))

@@ -5,7 +5,7 @@ import java.security.{MessageDigest, SecureRandom}
 import javax.crypto.Cipher
 import javax.crypto.spec.{IvParameterSpec, SecretKeySpec}
 
-import scala.util.Random
+import org.apache.commons.lang3.RandomUtils
 
 object AESCipher {
 
@@ -18,6 +18,8 @@ object AESCipher {
     }
     sb.toString
   }
+
+
   def encrypt(plainText: String, key: String): String = {
 
     val clean = plainText.getBytes

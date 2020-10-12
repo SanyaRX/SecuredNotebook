@@ -35,12 +35,12 @@ class WebService extends ScalatraServlet  {
   get("/sessionKey") {
 
 
-    val publicKeyString = params.get("publicKey").get.replace(" ", "+")
+    val publicKeyString = params.get("publicKey").get.replace(" ", "+").replace("\n", "")
 
     val sessionKey = AESCipher.generateSessionKey()
 
     val encryptedSessionKey = CipherUtils.encryptRSA(sessionKey, publicKeyString)
-
+   
     servletContext.setAttribute("sessionKey:" + encryptedSessionKey, sessionKey)
 
     "{\"sessionKey\":\"%s\"}" format encryptedSessionKey
@@ -51,7 +51,7 @@ class WebService extends ScalatraServlet  {
   get("/file") {
 
     val fileName = params.get("fileName").get
-    val encryptedSessionKey = params.get("sessionKey").orNull
+    val encryptedSessionKey = params.get("sessionKey").get.replace(" ", "+").replace("\n", "")
 
     if (encryptedSessionKey == null) null
 
@@ -63,11 +63,13 @@ class WebService extends ScalatraServlet  {
 
     val sessionKey = servletContext.getAttribute("sessionKey:" + encryptedSessionKey).toString
 
+    println(encryptedSessionKey)
+    println(sessionKey)
+
     val encryptedText = AESCipher.encrypt(fileText, sessionKey)
 
-
     "{\"text\":\"%s\"}" format encryptedText
-    (encryptedSessionKey, sessionKey)
+  
   }
 
 
