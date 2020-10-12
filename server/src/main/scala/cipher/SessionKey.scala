@@ -17,12 +17,12 @@ class SessionKey {
   }
 
 
-  def isAlive(): Boolean = System.currentTimeMillis() < this.destroyTime
+  def isAlive: Boolean = System.currentTimeMillis() < this.destroyTime
 
 
-  def getSessionKey(): String = {
+  def getSessionKey: String = {
 
-    if (isAlive()) sessionKey
+    if (isAlive) sessionKey
     else null
 
   }

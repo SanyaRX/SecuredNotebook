@@ -2,7 +2,7 @@ package config
 
 object ServerConfig {
 
-  var fileDirectoryPath: String = "."
+  var fileDirectoryPath: String = "./files"
   var sessionKeyLifeTimeMills: Long = 300000
 
 }
