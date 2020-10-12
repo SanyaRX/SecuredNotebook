@@ -23,6 +23,7 @@ class WebService extends ScalatraServlet  {
 
       sb.append(fileDirectory.listFiles(_.isFile())
                    .map("\"%s\"" format _.getName)
+                   .filter(!_.endsWith(".jar"))
                    .mkString(", ")
       )
     }
