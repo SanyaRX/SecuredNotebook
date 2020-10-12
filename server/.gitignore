@@ -1,6 +1,14 @@
 .bsp/
 .idea/
+.DS_Store
+
+files/
+
 project/target
 project/build.properties
+project/project
+
 target/
+
 out/
+
