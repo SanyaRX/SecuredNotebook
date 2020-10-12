@@ -64,12 +64,16 @@ class WebService extends ScalatraServlet  {
 
     val sessionKey = servletContext.getAttribute("sessionKey:" + encryptedSessionKey).asInstanceOf[SessionKey]
 
-    if (!sessionKey.isAlive) "{\"text\":\"Error 403\"}"
+    var response: String = ""
 
-    val encryptedText = AESCipher.encrypt(fileText, sessionKey.getSessionKey)
+    if (!sessionKey.isAlive) response = "{\"text\":\"Error 403\"}"
+    else {
+      val encryptedText = AESCipher.encrypt(fileText, sessionKey.getSessionKey)
 
-    "{\"text\":\"%s\"}" format encryptedText
-  
+      response = "{\"text\":\"%s\"}" format encryptedText
+    }
+
+    response
   }
 
 
