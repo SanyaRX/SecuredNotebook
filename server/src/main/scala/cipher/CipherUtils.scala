@@ -17,10 +17,7 @@ object CipherUtils {
   def decodeBase64FromString(text: String): Array[Byte]
   = java.util.Base64.getDecoder.decode(text)
 
-
-  /**
-    * TODO: implement encoding
-    * */
+  
   def publicFromString (publicK: String): PublicKey = {
 
     val keyBytes = decodeBase64FromString(publicK)
